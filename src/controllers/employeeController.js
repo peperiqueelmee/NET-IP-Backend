@@ -87,6 +87,7 @@ const sendEmailToRecoverPassword = async (req, res) => {
 		const employee = {
 			name: getFirstName(getEmployee.full_name),
 			email: hideEmail(getEmployee.email),
+			token: getEmployee.token,
 		};
 		res.status(200).json({ code: 200, data: employee });
 	} catch (error) {
