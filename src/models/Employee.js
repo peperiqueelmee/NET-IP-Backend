@@ -40,10 +40,15 @@ const Employee = sequelize.define(
 					employee.emp_password = await bcrypt.hash(employee.emp_password, salt);
 				}
 			},
+			beforeUpdate: async function (employee, options) {
+				if (employee.changed('emp_password')) {
+					const salt = await bcrypt.genSalt(10);
+					employee.emp_password = await bcrypt.hash(employee.emp_password, salt);
+				}
+			},
 		},
 	}
 );
-
 Employee.prototype.checkPassword = async function (passwordForm) {
 	return await bcrypt.compare(passwordForm, this.emp_password);
 };
