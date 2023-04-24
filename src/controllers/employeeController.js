@@ -1,5 +1,6 @@
 import Employee from '../models/Employee.js';
 import { errorResponse, generateId, generateJWT, hideEmail, getFirstName } from '../utils/utils.js';
+import emailRecoverEmployeePassword from '../utils/sendEmails.js';
 
 const registerEmployee = async (req, res) => {
 	const { email, username, full_name, emp_password } = req.body;
@@ -83,11 +84,24 @@ const sendEmailToRecoverPassword = async (req, res) => {
 		// Generate token
 		getEmployee.token = generateId();
 		await getEmployee.save();
+
+		// Data employee
+		const name = getFirstName(getEmployee.full_name);
+		const email = getEmployee.email;
+		const token = getEmployee.token;
+
+		//Send email with instructions
+		emailRecoverEmployeePassword({
+			email,
+			name,
+			token,
+		});
+
 		// Response
 		const employee = {
-			name: getFirstName(getEmployee.full_name),
-			email: hideEmail(getEmployee.email),
-			token: getEmployee.token,
+			name,
+			email: hideEmail(email),
+			token,
 		};
 		res.status(200).json({ code: 200, data: employee });
 	} catch (error) {
