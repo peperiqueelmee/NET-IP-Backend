@@ -1,18 +1,41 @@
-import Sequelize from 'sequelize';
 import bcrypt from 'bcrypt';
+import Sequelize from 'sequelize';
 import { sequelize } from '../config/db.js';
+import Role from './Role.js';
+import Status from './Status.js';
 
 const Employee = sequelize.define(
 	'employee',
 	{
-		employee_id: {
+		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true,
 			allowNull: false,
 			autoIncrement: true,
 		},
-		full_name: {
-			type: Sequelize.STRING(200),
+		rut: {
+			type: Sequelize.STRING(10),
+			allowNull: false,
+		},
+		names: {
+			type: Sequelize.STRING(60),
+			allowNull: false,
+		},
+		lastnames: {
+			type: Sequelize.STRING(60),
+			allowNull: false,
+		},
+		status_id: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+			defaultValue: 1,
+		},
+		role_id: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+		},
+		email: {
+			type: Sequelize.STRING(60),
 			allowNull: false,
 		},
 		username: {
@@ -20,15 +43,11 @@ const Employee = sequelize.define(
 			allowNull: false,
 		},
 		emp_password: {
-			type: Sequelize.STRING(200),
-			allowNull: false,
-		},
-		email: {
-			type: Sequelize.STRING(60),
+			type: Sequelize.STRING(150),
 			allowNull: false,
 		},
 		token: {
-			type: Sequelize.STRING(100),
+			type: Sequelize.STRING(60),
 		},
 	},
 	{
@@ -49,6 +68,8 @@ const Employee = sequelize.define(
 		},
 	}
 );
+Employee.belongsTo(Status, { foreignKey: 'status_id' });
+Employee.belongsTo(Role, { foreignKey: 'role_id' });
 Employee.prototype.checkPassword = async function (passwordForm) {
 	return await bcrypt.compare(passwordForm, this.emp_password);
 };

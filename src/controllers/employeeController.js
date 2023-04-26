@@ -1,28 +1,47 @@
 import Employee from '../models/Employee.js';
-import { errorResponse, generateId, generateJWT, hideEmail, getFirstName } from '../utils/utils.js';
+import {
+	errorResponse,
+	generateId,
+	generateJWT,
+	hideEmail,
+	getFirstName,
+	capitalizeString,
+	validateRut,
+} from '../utils/utils.js';
 import emailRecoverEmployeePassword from '../utils/sendEmails.js';
 
 const registerEmployee = async (req, res) => {
-	const { email, username, full_name, emp_password } = req.body;
+	const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
 	// Validate empty fields
-	const informationIsMissing = !email || !username || !full_name || !emp_password;
+	const informationIsMissing = !rut || !names || !lastnames || !role_id || !email || !username || !emp_password;
 	if (informationIsMissing) {
 		return errorResponse(res, 400, 'Enter all the information.');
 	}
 
 	try {
-		// Validate email and username
+		// Validate duplicate data
+		const rutIsValid = validateRut(rut);
+		if (!rutIsValid) {
+			return errorResponse(res, 409, 'RUT y/o formato incorrecto.');
+		}
+		const rutAlreadyRegistered = await Employee.findOne({ where: { rut } });
+		if (rutAlreadyRegistered) {
+			return errorResponse(res, 409, 'RUT ya registrado.');
+		}
 		const emailAlreadyRegistered = await Employee.findOne({ where: { email } });
 		if (emailAlreadyRegistered) {
-			return errorResponse(res, 409, 'Email already registered.');
+			return errorResponse(res, 409, 'Email ya registrado.');
 		}
 		const usernameAlreadyRegistered = await Employee.findOne({ where: { username } });
 		if (usernameAlreadyRegistered) {
-			return errorResponse(res, 409, 'Username already registered.');
+			return errorResponse(res, 409, 'Username ya registrado.');
 		}
 		// Save to database
 		const employee = await Employee.build({
-			full_name: full_name.toLowerCase(),
+			rut,
+			names: capitalizeString(names),
+			lastnames: capitalizeString(lastnames),
+			role_id,
 			username: username.toLowerCase(),
 			emp_password,
 			email: email.toLowerCase(),

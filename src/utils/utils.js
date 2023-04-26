@@ -36,4 +36,31 @@ function getFirstName(fullName) {
 	return namesArray[0];
 }
 
-export { errorResponse, generateJWT, generateId, hideEmail, getFirstName };
+const capitalizeString = (str) => {
+	const words = str.split(' ');
+	const capitalizedWords = words.map((word) => {
+		return word.charAt(0).toUpperCase() + word.slice(1);
+	});
+	return capitalizedWords.join(' ');
+};
+
+const validateRut = (rut) => {
+	if (rut.indexOf('-') === -1) return false;
+	rut = rut.replace(/\./g, '').replace(/\-/g, '');
+	var dv = rut.slice(-1).toUpperCase();
+	var rutSinDV = rut.slice(0, -1);
+	if (!/^\d+$/.test(rutSinDV)) return false;
+	var suma = 0,
+		factor = 2;
+	for (var i = rutSinDV.length - 1; i >= 0; i--) {
+		suma += factor * rutSinDV.charAt(i);
+		factor = factor === 7 ? 2 : factor + 1;
+	}
+	var dvEsperado = 11 - (suma % 11);
+	if (dvEsperado === 11) dvEsperado = '0';
+	else if (dvEsperado === 10) dvEsperado = 'K';
+	else dvEsperado = dvEsperado.toString();
+	return dv === dvEsperado;
+};
+
+export { errorResponse, generateJWT, generateId, hideEmail, getFirstName, capitalizeString, validateRut };

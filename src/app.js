@@ -1,9 +1,10 @@
-import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
 import { connectDB } from './config/db.js';
 import employeeRoutes from './routes/employeeRoutes.js';
-import dotenv from 'dotenv';
+import statusRoutes from './routes/roleRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -34,6 +35,7 @@ const PORT = process.env.PORT || 3000;
 
 //Routes
 app.use('/employee', employeeRoutes);
+app.use('/role', statusRoutes);
 
 //Execution server
 app.listen(PORT, () => {
