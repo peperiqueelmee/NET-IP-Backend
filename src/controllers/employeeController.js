@@ -140,7 +140,7 @@ const checkToken = async (req, res) => {
 		}
 		// Response
 		const employee = {
-			name: getFirstName(tokenIsValid.full_name),
+			name: getFirstName(tokenIsValid.names),
 		};
 		res.status(200).json({ code: 200, data: employee });
 	} catch (error) {
