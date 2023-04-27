@@ -171,7 +171,7 @@ const newEmployeePassword = async (req, res) => {
 		await getEmployee.save();
 		// Response
 		const employee = {
-			name: getFirstName(getEmployee.full_name),
+			name: getFirstName(getEmployee.names),
 		};
 		res.status(200).json({ code: 200, data: employee });
 	} catch (error) {
