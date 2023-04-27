@@ -105,7 +105,7 @@ const sendEmailToRecoverPassword = async (req, res) => {
 		await getEmployee.save();
 
 		// Data employee
-		const name = getFirstName(getEmployee.full_name);
+		const name = getFirstName(getEmployee.names);
 		const email = getEmployee.email;
 		const token = getEmployee.token;
 
