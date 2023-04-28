@@ -1,10 +1,11 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import express from 'express';
 import { connectDB } from './config/db.js';
 import employeeRoutes from './routes/employeeRoutes.js';
+import express from 'express';
 import statusRoutes from './routes/roleRoutes.js';
+
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,21 @@ const PORT = process.env.PORT || 3000;
 //Routes
 app.use('/employee', employeeRoutes);
 app.use('/role', statusRoutes);
+
+// Middleware to handle routes not found
+app.use((req, res, next) => {
+	const error = new Error('Not found');
+	error.status = 404;
+	next(error);
+});
+// Middleware to handle errors
+app.use((err, req, res, next) => {
+	res.status(err.status || 500).json({
+		error: {
+			message: err.message,
+		},
+	});
+});
 
 //Execution server
 app.listen(PORT, () => {

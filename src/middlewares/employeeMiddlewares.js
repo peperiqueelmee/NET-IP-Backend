@@ -1,13 +1,13 @@
 import { errorResponse, validateRut, generateJWT, generateId, getFirstName } from '../utils/utils.js';
-import { validateFullFields } from '../utils/Validations.js';
+import { validateFullFields, ValidatePasswordStrength } from '../utils/Validations.js';
 import Employee from '../models/Employee.js';
 
 const validateEmployeeRegistration = async (req, res, next) => {
 	const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
 
-	// Completed field validations and rut format.
+	//Validations fields and format
 	if (!validateFullFields([rut, names, lastnames, role_id, email, username, emp_password])) {
-		return errorResponse(res, 400, 'Enter all the information.');
+		return errorResponse(res, 400, 'Por favor completa el formulario.');
 	}
 	if (!validateRut(rut)) {
 		return errorResponse(res, 409, 'RUT y/o formato incorrecto.');
@@ -27,17 +27,20 @@ const validateEmployeeRegistration = async (req, res, next) => {
 		if (usernameAlreadyRegistered) {
 			return errorResponse(res, 409, 'Username ya registrado.');
 		}
+
+		if (!ValidatePasswordStrength(emp_password)) {
+			return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.');
+		}
 		next();
 	} catch (error) {
 		console.error(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 
 const validateEmployeeAuthentication = async (req, res, next) => {
 	const { username, emp_password } = req.body;
 
-	// Validate empty fields.
 	if (!validateFullFields([username, emp_password])) {
 		return errorResponse(res, 400, 'Enter all the information.');
 	}
@@ -60,14 +63,13 @@ const validateEmployeeAuthentication = async (req, res, next) => {
 		next();
 	} catch (error) {
 		console.error(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 
 const validateDataEmployeeRecoverPassword = async (req, res, next) => {
 	const { username } = req.body;
 
-	// Validate empty fields.
 	if (!validateFullFields([username])) {
 		return errorResponse(res, 400, 'Enter all the information.');
 	}
@@ -78,7 +80,6 @@ const validateDataEmployeeRecoverPassword = async (req, res, next) => {
 		if (!getEmployee) {
 			return errorResponse(res, 404, 'Unregistered user.');
 		}
-		// Generate token.
 		getEmployee.token = generateId();
 		await getEmployee.save();
 		// Attach the employee object.
@@ -90,7 +91,7 @@ const validateDataEmployeeRecoverPassword = async (req, res, next) => {
 		next();
 	} catch (error) {
 		console.log(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 
@@ -109,7 +110,7 @@ const validateToken = async (req, res, next) => {
 		next();
 	} catch (error) {
 		console.log(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 
@@ -117,17 +118,16 @@ const validateDataNewPassword = async (req, res, next) => {
 	const { token } = req.params;
 	const { emp_password } = req.body;
 
-	// Validate empty fields.
 	if (!validateFullFields([emp_password])) {
 		return errorResponse(res, 400, 'Por favor completa todos los campos.');
 	}
 
 	try {
-		// Validate username.
 		const tokenIsValid = await Employee.findOne({ where: { token } });
 		if (!tokenIsValid) {
 			return errorResponse(res, 401, 'Invalid Token.');
 		}
+		// Attach the employee object.
 		req.employee = {
 			employee: tokenIsValid,
 			emp_password,
@@ -135,7 +135,7 @@ const validateDataNewPassword = async (req, res, next) => {
 		next();
 	} catch (error) {
 		console.log(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 

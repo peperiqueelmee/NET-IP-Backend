@@ -1,6 +1,6 @@
-import Employee from '../models/Employee.js';
-import { hideEmail, getFirstName, capitalizeString } from '../utils/utils.js';
+import { hideEmail, getFirstName, capitalizeString, errorResponse } from '../utils/utils.js';
 import emailRecoverEmployeePassword from '../utils/sendEmails.js';
+import Employee from '../models/Employee.js';
 
 const registerEmployee = async (req, res) => {
 	const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
@@ -18,7 +18,7 @@ const registerEmployee = async (req, res) => {
 		res.status(200).json({ code: 200, data: employeeData });
 	} catch (error) {
 		console.error(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 
@@ -65,8 +65,47 @@ const newEmployeePassword = async (req, res) => {
 		res.status(200).json({ code: 200, data: employeeData });
 	} catch (error) {
 		console.log(error);
-		res.status(500).json(error);
+		return res.status(500).json({ message: 'Internal server error.' });
 	}
 };
 
-export { registerEmployee, authenticateEmployee, sendEmailToRecoverPassword, getNameEmployee, newEmployeePassword };
+const getEmployees = async (req, res) => {
+	const { rut } = req.params;
+
+	try {
+		const employeeData = rut ? await Employee.findAll({ where: { rut } }) : await Employee.findAll();
+		return employeeData.length
+			? res.status(200).json({ code: 200, data: employeeData })
+			: res.status(404).json({ code: 404, message: 'No employees found.' });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal server error.' });
+	}
+};
+
+const getEmployeesByStatus = async (req, res) => {
+	const { status } = req.params;
+
+	try {
+		const employeeData = await Employee.findAll({
+			where: { status_id: status },
+		});
+
+		return employeeData.length
+			? res.status(200).json({ code: 200, data: employeeData })
+			: res.status(404).json({ code: 404, message: 'No employees found.' });
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ message: 'Internal server error.' });
+	}
+};
+
+export {
+	registerEmployee,
+	authenticateEmployee,
+	sendEmailToRecoverPassword,
+	getNameEmployee,
+	newEmployeePassword,
+	getEmployees,
+	getEmployeesByStatus,
+};

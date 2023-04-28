@@ -5,6 +5,8 @@ import {
 	newEmployeePassword,
 	registerEmployee,
 	sendEmailToRecoverPassword,
+	getEmployees,
+	getEmployeesByStatus,
 } from '../controllers/employeeController.js';
 import {
 	validateDataEmployeeRecoverPassword,
@@ -16,6 +18,8 @@ import {
 
 const router = Router();
 
+router.get('/employees/:rut?', getEmployees);
+router.get('/employee/status/:status', getEmployeesByStatus);
 router.post('/', validateEmployeeRegistration, registerEmployee);
 router.post('/login', validateEmployeeAuthentication, authenticateEmployee);
 router.post('/forgot-password', validateDataEmployeeRecoverPassword, sendEmailToRecoverPassword);
