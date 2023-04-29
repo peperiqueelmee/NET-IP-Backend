@@ -1,6 +1,8 @@
 import { hideEmail, getFirstName, capitalizeString, errorResponse } from '../utils/utils.js';
 import emailRecoverEmployeePassword from '../utils/sendEmails.js';
 import Employee from '../models/Employee.js';
+import Role from '../models/Role.js';
+import Status from '../models/Status.js';
 
 const registerEmployee = async (req, res) => {
 	const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
@@ -73,7 +75,20 @@ const getEmployees = async (req, res) => {
 	const { rut } = req.params;
 
 	try {
-		const employeeData = rut ? await Employee.findAll({ where: { rut } }) : await Employee.findAll();
+		const employeeData = await Employee.findAll({
+			where: rut ? { rut } : {},
+			include: [
+				{
+					model: Role,
+					attributes: ['description'],
+				},
+				{
+					model: Status,
+					attributes: ['description'],
+				},
+			],
+		});
+
 		return employeeData.length
 			? res.status(200).json({ code: 200, data: employeeData })
 			: res.status(404).json({ code: 404, message: 'No employees found.' });
@@ -89,6 +104,16 @@ const getEmployeesByStatus = async (req, res) => {
 	try {
 		const employeeData = await Employee.findAll({
 			where: { status_id: status },
+			include: [
+				{
+					model: Status,
+					attributes: ['description'],
+				},
+				{
+					model: Role,
+					attributes: ['description'],
+				},
+			],
 		});
 
 		return employeeData.length

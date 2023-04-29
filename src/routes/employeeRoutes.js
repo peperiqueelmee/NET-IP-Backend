@@ -19,7 +19,7 @@ import {
 const router = Router();
 
 router.get('/employees/:rut?', getEmployees);
-router.get('/employee/status/:status', getEmployeesByStatus);
+router.get('/employees/status/:status', getEmployeesByStatus);
 router.post('/', validateEmployeeRegistration, registerEmployee);
 router.post('/login', validateEmployeeAuthentication, authenticateEmployee);
 router.post('/forgot-password', validateDataEmployeeRecoverPassword, sendEmailToRecoverPassword);
