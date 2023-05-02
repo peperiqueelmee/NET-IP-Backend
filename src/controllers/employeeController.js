@@ -1,4 +1,4 @@
-import { hideEmail, getFirstName, capitalizeString, errorResponse } from '../utils/utils.js';
+import { hideEmail, getFirstName, capitalizeString } from '../utils/utils.js';
 import emailRecoverEmployeePassword from '../utils/sendEmails.js';
 import Employee from '../models/Employee.js';
 import Role from '../models/Role.js';

@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import employeeRoutes from './routes/employeeRoutes.js';
 import express from 'express';
-import statusRoutes from './routes/roleRoutes.js';
+import roleRoutes from './routes/roleRoutes.js';
+import phoneRoutes from './routes/PhoneRoutes.js';
 
 dotenv.config();
 
@@ -36,7 +37,8 @@ const PORT = process.env.PORT || 3000;
 
 //Routes
 app.use('/employee', employeeRoutes);
-app.use('/role', statusRoutes);
+app.use('/role', roleRoutes);
+app.use('/phone', phoneRoutes);
 
 // Middleware to handle routes not found
 app.use((req, res, next) => {

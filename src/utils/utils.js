@@ -63,4 +63,17 @@ const validateRut = (rut) => {
 	return dv === dvEsperado;
 };
 
-export { errorResponse, generateJWT, generateId, hideEmail, getFirstName, capitalizeString, validateRut };
+const removeWhitespace = (string) => {
+	return string.replace(/\s+/g, '');
+};
+
+export {
+	capitalizeString,
+	errorResponse,
+	generateId,
+	generateJWT,
+	getFirstName,
+	hideEmail,
+	removeWhitespace,
+	validateRut,
+};
