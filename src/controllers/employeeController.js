@@ -117,9 +117,8 @@ const getEmployeesByStatus = async (req, res) => {
 			],
 		});
 
-		return employeeData.length
-			? res.status(200).json({ code: 200, data: employeeData })
-			: res.status(404).json({ code: 404, message: 'No employees found.' });
+		return res.status(200).json({ code: 200, data: employeeData })
+		
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ message: 'Internal server error.' });
