@@ -1,11 +1,12 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './config/db.js';
-import employeeRoutes from './routes/employeeRoutes.js';
 import express from 'express';
-import roleRoutes from './routes/roleRoutes.js';
+import { connectDB } from './config/db.js';
 import phoneRoutes from './routes/PhoneRoutes.js';
+import employeeRoutes from './routes/employeeRoutes.js';
+import roleRoutes from './routes/roleRoutes.js';
+import statusRoutes from './routes/statusRoutes.js';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ const PORT = process.env.PORT || 3000;
 app.use('/employee', employeeRoutes);
 app.use('/role', roleRoutes);
 app.use('/phone', phoneRoutes);
+app.use('/status', statusRoutes);
 
 // Middleware to handle routes not found
 app.use((req, res, next) => {

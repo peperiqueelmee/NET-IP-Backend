@@ -6,9 +6,12 @@ import { removeWhitespace } from '../utils/utils.js';
 
 const getPhones = async (req, res) => {
 	const { phone_number } = req.params;
+	const { page = 1, limit = 20 } = req.query;
+
+	const offset = (page - 1) * limit;
 
 	try {
-		const phoneData = await ClientPhone.findAll({
+		const phoneData = await ClientPhone.findAndCountAll({
 			where: phone_number ? { phone_number: removeWhitespace(phone_number) } : {},
 			include: [
 				{
@@ -21,10 +24,12 @@ const getPhones = async (req, res) => {
 				},
 			],
 			attributes: ['id', 'phone_number', 'status_id'],
+			offset: parseInt(offset),
+			limit: parseInt(limit),
 		});
 
-		return phoneData.length
-			? res.status(200).json({ code: 200, data: phoneData })
+		return phoneData.rows.length
+			? res.status(200).json({ code: 200, data: phoneData.rows, total: phoneData.count }) // Agregar la propiedad 'total' al objeto de respuesta
 			: res.status(404).json({ code: 404, data: {} });
 	} catch (error) {
 		console.log(error);

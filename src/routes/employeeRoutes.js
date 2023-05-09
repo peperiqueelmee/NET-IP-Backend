@@ -1,17 +1,19 @@
 import { Router } from 'express';
 import {
 	authenticateEmployee,
+	getEmployees,
+	getEmployeesByStatus,
 	getNameEmployee,
 	newEmployeePassword,
 	registerEmployee,
 	sendEmailToRecoverPassword,
-	getEmployees,
-	getEmployeesByStatus,
+	updateEmployee,
 } from '../controllers/employeeController.js';
 import {
 	validateDataEmployeeRecoverPassword,
 	validateDataNewPassword,
 	validateEmployeeAuthentication,
+	validateEmployeeUpdate,
 	validateEmployeeRegistration,
 	validateToken,
 } from '../middlewares/employeeMiddlewares.js';
@@ -27,5 +29,6 @@ router
 	.route('/forgot-password/:token')
 	.get(validateToken, getNameEmployee)
 	.post(validateDataNewPassword, newEmployeePassword);
+router.put('/update/:id', validateEmployeeUpdate, updateEmployee);
 
 export default router;

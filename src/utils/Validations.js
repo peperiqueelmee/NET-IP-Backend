@@ -1,3 +1,5 @@
+import { Op } from 'sequelize';
+
 const validateFullFields = (array) =>
 	array.every((element) => element !== '' && element !== null && element !== undefined);
 
@@ -8,4 +10,13 @@ function ValidatePasswordStrength(password) {
 	return regex.test(password);
 }
 
-export { validateFullFields, ValidatePasswordStrength };
+const alreadyRegistered = async (model, field, value, id = null) => {
+	const whereClause = { [field]: value };
+	if (id) {
+		whereClause.id = { [Op.ne]: id };
+	}
+	const found = await model.findOne({ where: whereClause });
+	return Boolean(found);
+};
+
+export { validateFullFields, ValidatePasswordStrength, alreadyRegistered };

@@ -1,6 +1,6 @@
-import { errorResponse, validateRut, generateJWT, generateId, getFirstName } from '../utils/utils.js';
-import { validateFullFields, ValidatePasswordStrength } from '../utils/Validations.js';
 import Employee from '../models/Employee.js';
+import { ValidatePasswordStrength, validateFullFields, alreadyRegistered } from '../utils/Validations.js';
+import { errorResponse, generateId, generateJWT, getFirstName, validateRut } from '../utils/utils.js';
 
 const validateEmployeeRegistration = async (req, res, next) => {
 	const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
@@ -15,15 +15,15 @@ const validateEmployeeRegistration = async (req, res, next) => {
 
 	try {
 		// Validate duplicate data.
-		const rutAlreadyRegistered = await Employee.findOne({ where: { rut } });
-		if (rutAlreadyRegistered) {
+		const isRutAlreadyRegistered = await alreadyRegistered(Employee, 'rut', rut);
+		if (isRutAlreadyRegistered) {
 			return errorResponse(res, 409, 'RUT ya registrado.');
 		}
-		const emailAlreadyRegistered = await Employee.findOne({ where: { email } });
-		if (emailAlreadyRegistered) {
+		const isEmailAlreadyRegistered = await alreadyRegistered(Employee, 'email', email);
+		if (isEmailAlreadyRegistered) {
 			return errorResponse(res, 409, 'Email ya registrado.');
 		}
-		const usernameAlreadyRegistered = await Employee.findOne({ where: { username } });
+		const usernameAlreadyRegistered = await alreadyRegistered(Employee, 'username', username);
 		if (usernameAlreadyRegistered) {
 			return errorResponse(res, 409, 'Username ya registrado.');
 		}
@@ -139,10 +139,57 @@ const validateDataNewPassword = async (req, res, next) => {
 	}
 };
 
+const validateEmployeeUpdate = async (req, res, next) => {
+	const { id } = req.params;
+	const { rut, email, username, emp_password } = req.body;
+
+	try {
+		const employee = await Employee.findOne({ where: { id } });
+		if (!employee) {
+			return res.status(404).json({ code: 404, message: 'Employee not found.' });
+		}
+		// Validate duplicate data.
+		if (rut) {
+			if (!validateRut(rut)) {
+				return errorResponse(res, 409, 'RUT y/o formato incorrecto.');
+			}
+			const isRutAlreadyRegistered = await alreadyRegistered(Employee, 'rut', rut, id);
+			if (isRutAlreadyRegistered) {
+				return errorResponse(res, 409, 'RUT ya registrado.');
+			}
+		}
+		if (email) {
+			const isEmailAlreadyRegistered = await alreadyRegistered(Employee, 'email', email, id);
+			if (isEmailAlreadyRegistered) {
+				return errorResponse(res, 409, 'Email ya registrado.');
+			}
+		}
+		if (username) {
+			const usernameAlreadyRegistered = await alreadyRegistered(Employee, 'username', username, id);
+			if (usernameAlreadyRegistered) {
+				return errorResponse(res, 409, 'Username ya registrado.');
+			}
+		}
+
+		if (emp_password && !ValidatePasswordStrength(emp_password)) {
+			return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.');
+		}
+		// Attach the employee object.
+		req.employee = {
+			employee,
+		};
+		next();
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ message: 'Internal server error.' });
+	}
+};
+
 export {
-	validateEmployeeRegistration,
-	validateEmployeeAuthentication,
 	validateDataEmployeeRecoverPassword,
-	validateToken,
 	validateDataNewPassword,
+	validateEmployeeAuthentication,
+	validateEmployeeUpdate,
+	validateEmployeeRegistration,
+	validateToken,
 };

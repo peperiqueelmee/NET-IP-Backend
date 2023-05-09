@@ -45,6 +45,8 @@ const capitalizeString = (str) => {
 };
 
 const validateRut = (rut) => {
+	if (!rut) return false;
+
 	if (rut.indexOf('-') === -1) return false;
 	rut = rut.replace(/\./g, '').replace(/\-/g, '');
 	var dv = rut.slice(-1).toUpperCase();

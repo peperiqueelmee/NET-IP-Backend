@@ -87,6 +87,7 @@ const getEmployees = async (req, res) => {
 					attributes: ['description'],
 				},
 			],
+			attributes: { exclude: ['emp_password', 'token'] },
 		});
 
 		return employeeData.length
@@ -125,12 +126,36 @@ const getEmployeesByStatus = async (req, res) => {
 	}
 };
 
+const updateEmployee = async (req, res) => {
+	const { rut, names, lastnames, status_id, role_id, email, username, emp_password } = req.body;
+	const { employee } = req.employee;
+
+	try {
+		// Update employee fields
+		employee.rut = rut || employee.rut;
+		employee.names = names || employee.names;
+		employee.lastnames = lastnames || employee.lastnames;
+		employee.status_id = status_id || employee.status_id;
+		employee.role_id = role_id || employee.role_id;
+		employee.email = email || employee.email;
+		employee.username = username || employee.username;
+		employee.emp_password = emp_password || employee.emp_password;
+
+		await employee.save();
+		return res.status(200).json({ code: 200, data: employee });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal server error.' });
+	}
+};
+
 export {
-	registerEmployee,
 	authenticateEmployee,
-	sendEmailToRecoverPassword,
-	getNameEmployee,
-	newEmployeePassword,
 	getEmployees,
 	getEmployeesByStatus,
+	getNameEmployee,
+	newEmployeePassword,
+	registerEmployee,
+	sendEmailToRecoverPassword,
+	updateEmployee,
 };
