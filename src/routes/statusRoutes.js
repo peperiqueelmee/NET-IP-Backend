@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getEmployeeStatus } from '../controllers/StatusController.js';
+import { getEmployeeStatus } from '../controllers/statusController.js';
 
 const router = Router();
 
