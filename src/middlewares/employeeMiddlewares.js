@@ -1,5 +1,5 @@
 import Employee from '../models/Employee.js';
-import { ValidatePasswordStrength, validateFullFields, alreadyRegistered } from '../utils/Validations.js';
+import { ValidatePasswordStrength, alreadyRegistered, validateFullFields } from '../utils/Validations.js';
 import { errorResponse, generateId, generateJWT, getFirstName, validateRut } from '../utils/utils.js';
 
 const validateEmployeeRegistration = async (req, res, next) => {
@@ -40,6 +40,7 @@ const validateEmployeeRegistration = async (req, res, next) => {
 
 const validateEmployeeAuthentication = async (req, res, next) => {
 	const { username, emp_password } = req.body;
+	const userIsInactive = 2;
 
 	if (!validateFullFields([username, emp_password])) {
 		return errorResponse(res, 400, 'Enter all the information.');
@@ -48,11 +49,14 @@ const validateEmployeeAuthentication = async (req, res, next) => {
 	try {
 		const getEmployee = await Employee.findOne({ where: { username } });
 		if (!getEmployee) {
-			return errorResponse(res, 404, 'Unregistered user.');
+			return errorResponse(res, 404, 'Usuario o contraseña incorrecta.');
 		}
 		const passwordIsValid = await getEmployee.checkPassword(emp_password);
 		if (!passwordIsValid) {
-			return errorResponse(res, 401, 'Invalid password.');
+			return errorResponse(res, 401, 'Usuario o contraseña incorrecta.');
+		}
+		if (getEmployee.status_id === userIsInactive) {
+			return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
 		}
 		// Attach the employee object.
 		req.employee = {
@@ -69,6 +73,7 @@ const validateEmployeeAuthentication = async (req, res, next) => {
 
 const validateDataEmployeeRecoverPassword = async (req, res, next) => {
 	const { username } = req.body;
+	const userIsInactive = 2;
 
 	if (!validateFullFields([username])) {
 		return errorResponse(res, 400, 'Enter all the information.');
@@ -78,8 +83,12 @@ const validateDataEmployeeRecoverPassword = async (req, res, next) => {
 		// Validate username.
 		const getEmployee = await Employee.findOne({ where: { username } });
 		if (!getEmployee) {
-			return errorResponse(res, 404, 'Unregistered user.');
+			return errorResponse(res, 404, 'Usuario no registrado.');
 		}
+		if (getEmployee.status_id === userIsInactive) {
+			return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
+		}
+
 		getEmployee.token = generateId();
 		await getEmployee.save();
 		// Attach the employee object.
@@ -101,12 +110,29 @@ const validateToken = async (req, res, next) => {
 	try {
 		const tokenIsValid = await Employee.findOne({ where: { token } });
 		if (!tokenIsValid) {
-			return errorResponse(res, 401, 'Invalid Token.');
+			return errorResponse(res, 401, 'Enlace invalido.');
 		}
 		// Attach the employee object.
 		req.employee = {
 			name: getFirstName(tokenIsValid.names),
 		};
+		next();
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: 'Internal server error.' });
+	}
+};
+
+const validateUserStatus = async (req, res, next) => {
+	const { token } = req.params;
+	const userIsInactive = 2;
+
+	try {
+		const getEmployee = await Employee.findOne({ where: { token } });
+		if (getEmployee.status_id === userIsInactive) {
+			return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
+		}
+
 		next();
 	} catch (error) {
 		console.log(error);
@@ -189,7 +215,8 @@ export {
 	validateDataEmployeeRecoverPassword,
 	validateDataNewPassword,
 	validateEmployeeAuthentication,
-	validateEmployeeUpdate,
 	validateEmployeeRegistration,
+	validateEmployeeUpdate,
 	validateToken,
+	validateUserStatus,
 };

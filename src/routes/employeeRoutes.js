@@ -13,9 +13,10 @@ import {
 	validateDataEmployeeRecoverPassword,
 	validateDataNewPassword,
 	validateEmployeeAuthentication,
-	validateEmployeeUpdate,
 	validateEmployeeRegistration,
+	validateEmployeeUpdate,
 	validateToken,
+	validateUserStatus,
 } from '../middlewares/employeeMiddlewares.js';
 
 const router = Router();
@@ -27,7 +28,7 @@ router.post('/login', validateEmployeeAuthentication, authenticateEmployee);
 router.post('/forgot-password', validateDataEmployeeRecoverPassword, sendEmailToRecoverPassword);
 router
 	.route('/forgot-password/:token')
-	.get(validateToken, getNameEmployee)
+	.get([validateToken, validateUserStatus], getNameEmployee)
 	.post(validateDataNewPassword, newEmployeePassword);
 router.put('/update/:id', validateEmployeeUpdate, updateEmployee);
 
