@@ -29,7 +29,7 @@ const getPhones = async (req, res) => {
 		});
 
 		return phoneData.rows.length
-			? res.status(200).json({ code: 200, data: phoneData.rows, total: phoneData.count }) // Agregar la propiedad 'total' al objeto de respuesta
+			? res.status(200).json({ code: 200, data: phoneData.rows, total: phoneData.count })
 			: res.status(404).json({ code: 404, data: {} });
 	} catch (error) {
 		console.log(error);
@@ -39,9 +39,12 @@ const getPhones = async (req, res) => {
 
 const getPhonesByStatus = async (req, res) => {
 	const { status } = req.params;
+	const { page = 1, limit = 20 } = req.query;
+
+	const offset = (page - 1) * limit;
 
 	try {
-		const phoneData = await ClientPhone.findAll({
+		const phoneData = await ClientPhone.findAndCountAll({
 			where: { status_id: status },
 			include: [
 				{
@@ -54,10 +57,13 @@ const getPhonesByStatus = async (req, res) => {
 				},
 			],
 			attributes: ['id', 'phone_number', 'status_id'],
+			attributes: ['id', 'phone_number', 'status_id'],
+			offset: parseInt(offset),
+			limit: parseInt(limit),
 		});
 
-		return phoneData.length
-			? res.status(200).json({ code: 200, data: phoneData })
+		return phoneData.rows.length
+			? res.status(200).json({ code: 200, data: phoneData.rows, total: phoneData.count })
 			: res.status(404).json({ code: 404, data: {} });
 	} catch (error) {
 		console.error(error);
