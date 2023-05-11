@@ -73,9 +73,12 @@ const newEmployeePassword = async (req, res) => {
 
 const getEmployees = async (req, res) => {
 	const { rut } = req.params;
+	const { page = 1, limit = 20 } = req.query;
+
+	const offset = (page - 1) * limit;
 
 	try {
-		const employeeData = await Employee.findAll({
+		const employeeData = await Employee.findAndCountAll({
 			where: rut ? { rut } : {},
 			include: [
 				{
@@ -88,11 +91,13 @@ const getEmployees = async (req, res) => {
 				},
 			],
 			attributes: { exclude: ['emp_password', 'token'] },
+			offset: parseInt(offset),
+			limit: parseInt(limit),
 		});
 
-		return employeeData.length
-			? res.status(200).json({ code: 200, data: employeeData })
-			: res.status(404).json({ code: 404, message: 'No employees found.' });
+		return employeeData.rows.length
+			? res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count })
+			: res.status(404).json({ code: 404, data: {} });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'Internal server error.' });
@@ -101,9 +106,12 @@ const getEmployees = async (req, res) => {
 
 const getEmployeesByStatus = async (req, res) => {
 	const { status } = req.params;
+	const { page = 1, limit = 20 } = req.query;
+
+	const offset = (page - 1) * limit;
 
 	try {
-		const employeeData = await Employee.findAll({
+		const employeeData = await Employee.findAndCountAll({
 			where: { status_id: status },
 			include: [
 				{
@@ -115,10 +123,13 @@ const getEmployeesByStatus = async (req, res) => {
 					attributes: ['description'],
 				},
 			],
+			offset: parseInt(offset),
+			limit: parseInt(limit),
 		});
 
-		return res.status(200).json({ code: 200, data: employeeData })
-		
+		return employeeData.rows.length
+			? res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count })
+			: res.status(404).json({ code: 404, data: {} });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ message: 'Internal server error.' });
