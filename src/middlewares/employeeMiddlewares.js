@@ -63,6 +63,7 @@ const validateEmployeeAuthentication = async (req, res, next) => {
 			username,
 			email: getEmployee.email,
 			token: generateJWT(getEmployee.employee_id),
+			rut: getEmployee.rut,
 		};
 		next();
 	} catch (error) {
