@@ -95,9 +95,7 @@ const getEmployees = async (req, res) => {
 			limit: parseInt(limit),
 		});
 
-		return employeeData.rows.length
-			? res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count })
-			: res.status(404).json({ code: 404, data: {} });
+		return res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count });
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: 'Internal server error.' });
@@ -127,9 +125,7 @@ const getEmployeesByStatus = async (req, res) => {
 			limit: parseInt(limit),
 		});
 
-		return employeeData.rows.length
-			? res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count })
-			: res.status(404).json({ code: 404, data: {} });
+		return res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ message: 'Internal server error.' });
