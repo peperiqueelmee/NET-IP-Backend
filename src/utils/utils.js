@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const errorResponse = (res, code, message) => res.status(code).json({ code, message });
+const errorResponse = (res, code, message, input) => res.status(code).json({ code, message, input });
 
 const generateJWT = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
