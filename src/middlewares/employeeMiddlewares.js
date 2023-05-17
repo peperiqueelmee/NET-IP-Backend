@@ -5,7 +5,6 @@ import { errorResponse, generateId, generateJWT, getFirstName, validateRut } fro
 const validateEmployeeRegistration = async (req, res, next) => {
   const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
 
-  //Validations fields and format
   if (!validateFullFields([rut, names, lastnames, role_id, email, username, emp_password])) {
     return errorResponse(res, 400, 'Por favor completa el formulario.');
   }
@@ -14,20 +13,15 @@ const validateEmployeeRegistration = async (req, res, next) => {
   }
 
   try {
-    // Validate duplicate data.
-    const isRutAlreadyRegistered = await alreadyRegistered(Employee, 'rut', rut);
-    if (isRutAlreadyRegistered) {
+    if (await alreadyRegistered(Employee, 'rut', rut)) {
       return errorResponse(res, 409, 'RUT ya registrado.', 'RUT');
     }
-    const isEmailAlreadyRegistered = await alreadyRegistered(Employee, 'email', email);
-    if (isEmailAlreadyRegistered) {
+    if (await alreadyRegistered(Employee, 'email', email)) {
       return errorResponse(res, 409, 'Email ya registrado.', 'Email');
     }
-    const usernameAlreadyRegistered = await alreadyRegistered(Employee, 'username', username);
-    if (usernameAlreadyRegistered) {
+    if (await alreadyRegistered(Employee, 'username', username)) {
       return errorResponse(res, 409, 'Nombre de usuario ya registrado.', 'Username');
     }
-
     if (!ValidatePasswordStrength(emp_password)) {
       return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.', 'Password');
     }
@@ -47,23 +41,22 @@ const validateEmployeeAuthentication = async (req, res, next) => {
   }
 
   try {
-    const getEmployee = await Employee.findOne({ where: { username } });
-    if (!getEmployee) {
+    const employee = await Employee.findOne({ where: { username } });
+    if (!employee) {
       return errorResponse(res, 404, 'Usuario o contraseña incorrecta.');
     }
-    const passwordIsValid = await getEmployee.checkPassword(emp_password);
-    if (!passwordIsValid) {
+    if (!(await employee.checkPassword(emp_password))) {
       return errorResponse(res, 401, 'Usuario o contraseña incorrecta.');
     }
-    if (getEmployee.status_id === userIsInactive) {
+    if (employee.status_id === userIsInactive) {
       return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
     }
     // Attach the employee object.
     req.employee = {
       username,
-      email: getEmployee.email,
-      token: generateJWT(getEmployee.employee_id),
-      rut: getEmployee.rut,
+      email: employee.email,
+      token: generateJWT(employee.employee_id),
+      rut: employee.rut,
     };
     next();
   } catch (error) {
@@ -81,22 +74,21 @@ const validateDataEmployeeRecoverPassword = async (req, res, next) => {
   }
 
   try {
-    // Validate username.
-    const getEmployee = await Employee.findOne({ where: { username } });
-    if (!getEmployee) {
+    const employee = await Employee.findOne({ where: { username } });
+    if (!employee) {
       return errorResponse(res, 404, 'Usuario no registrado.');
     }
-    if (getEmployee.status_id === userIsInactive) {
+    if (employee.status_id === userIsInactive) {
       return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
     }
 
-    getEmployee.token = generateId();
-    await getEmployee.save();
+    employee.token = generateId();
+    await employee.save();
     // Attach the employee object.
     req.employee = {
-      name: getFirstName(getEmployee.names),
-      email: getEmployee.email,
-      token: getEmployee.token,
+      name: getFirstName(employee.names),
+      email: employee.email,
+      token: employee.token,
     };
     next();
   } catch (error) {
@@ -109,13 +101,13 @@ const validateToken = async (req, res, next) => {
   const { token } = req.params;
 
   try {
-    const tokenIsValid = await Employee.findOne({ where: { token } });
-    if (!tokenIsValid) {
+    const employee = await Employee.findOne({ where: { token } });
+    if (!employee) {
       return errorResponse(res, 401, 'Enlace invalido.');
     }
     // Attach the employee object.
     req.employee = {
-      name: getFirstName(tokenIsValid.names),
+      name: getFirstName(employee.names),
     };
     next();
   } catch (error) {
@@ -129,11 +121,10 @@ const validateUserStatus = async (req, res, next) => {
   const userIsInactive = 2;
 
   try {
-    const getEmployee = await Employee.findOne({ where: { token } });
-    if (getEmployee.status_id === userIsInactive) {
+    const employee = await Employee.findOne({ where: { token } });
+    if (employee.status_id === userIsInactive) {
       return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
     }
-
     next();
   } catch (error) {
     console.log(error);
@@ -150,13 +141,13 @@ const validateDataNewPassword = async (req, res, next) => {
   }
 
   try {
-    const tokenIsValid = await Employee.findOne({ where: { token } });
-    if (!tokenIsValid) {
-      return errorResponse(res, 401, 'Invalid Token.');
+    const employee = await Employee.findOne({ where: { token } });
+    if (!employee) {
+      return errorResponse(res, 401, 'Enlace invalido.');
     }
     // Attach the employee object.
     req.employee = {
-      employee: tokenIsValid,
+      employee,
       emp_password,
     };
     next();
@@ -175,29 +166,18 @@ const validateEmployeeUpdate = async (req, res, next) => {
     if (!employee) {
       return res.status(404).json({ code: 404, message: 'Employee not found.' });
     }
-    // Validate duplicate data.
-    if (rut) {
-      if (!validateRut(rut)) {
-        return errorResponse(res, 409, 'RUT y/o formato incorrecto.', 'RUT');
-      }
-      const isRutAlreadyRegistered = await alreadyRegistered(Employee, 'rut', rut, id);
-      if (isRutAlreadyRegistered) {
-        return errorResponse(res, 409, 'RUT ya registrado.', 'RUT');
-      }
+    if (rut && !validateRut(rut)) {
+      return errorResponse(res, 409, 'RUT y/o formato incorrecto.', 'RUT');
     }
-    if (email) {
-      const isEmailAlreadyRegistered = await alreadyRegistered(Employee, 'email', email, id);
-      if (isEmailAlreadyRegistered) {
-        return errorResponse(res, 409, 'Email ya registrado.', 'Email');
-      }
+    if (rut && (await alreadyRegistered(Employee, 'rut', rut, id))) {
+      return errorResponse(res, 409, 'RUT ya registrado.', 'RUT');
     }
-    if (username) {
-      const usernameAlreadyRegistered = await alreadyRegistered(Employee, 'username', username, id);
-      if (usernameAlreadyRegistered) {
-        return errorResponse(res, 409, 'Username ya registrado.', 'Username');
-      }
+    if (email && (await alreadyRegistered(Employee, 'email', email, id))) {
+      return errorResponse(res, 409, 'Email ya registrado.', 'Email');
     }
-
+    if (username && (await alreadyRegistered(Employee, 'username', username, id))) {
+      return errorResponse(res, 409, 'Username ya registrado.', 'Username');
+    }
     if (emp_password && !ValidatePasswordStrength(emp_password)) {
       return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.', 'Password');
     }
