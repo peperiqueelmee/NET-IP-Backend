@@ -178,28 +178,28 @@ const validateEmployeeUpdate = async (req, res, next) => {
     // Validate duplicate data.
     if (rut) {
       if (!validateRut(rut)) {
-        return errorResponse(res, 409, 'RUT y/o formato incorrecto.');
+        return errorResponse(res, 409, 'RUT y/o formato incorrecto.', 'RUT');
       }
       const isRutAlreadyRegistered = await alreadyRegistered(Employee, 'rut', rut, id);
       if (isRutAlreadyRegistered) {
-        return errorResponse(res, 409, 'RUT ya registrado.');
+        return errorResponse(res, 409, 'RUT ya registrado.', 'RUT');
       }
     }
     if (email) {
       const isEmailAlreadyRegistered = await alreadyRegistered(Employee, 'email', email, id);
       if (isEmailAlreadyRegistered) {
-        return errorResponse(res, 409, 'Email ya registrado.');
+        return errorResponse(res, 409, 'Email ya registrado.', 'Email');
       }
     }
     if (username) {
       const usernameAlreadyRegistered = await alreadyRegistered(Employee, 'username', username, id);
       if (usernameAlreadyRegistered) {
-        return errorResponse(res, 409, 'Username ya registrado.');
+        return errorResponse(res, 409, 'Username ya registrado.', 'Username');
       }
     }
 
     if (emp_password && !ValidatePasswordStrength(emp_password)) {
-      return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.');
+      return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.', 'Password');
     }
     // Attach the employee object.
     req.employee = {
