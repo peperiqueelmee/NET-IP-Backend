@@ -1,7 +1,7 @@
 import NormalAnex from '../models/NormalAnex.js';
-import AnexType from '../models/anexTypes.js';
-import Department from '../models/departments.js';
-import TransportType from '../models/transportTypes.js';
+import AnexType from '../models/AnexType.js';
+import Department from '../models/Department.js';
+import TransportType from '../models/TransportType.js';
 
 const createNormalAnex = async (req, res) => {
   const { anexNumber, password, anexType, transportType, department } =

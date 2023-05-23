@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../config/db.js';
-import AnexType from './anexTypes.js';
-import Department from './departments.js';
-import TransportType from './transportTypes.js';
+import AnexType from './AnexType.js';
+import Department from './Department.js';
+import TransportType from './TransportType.js';
 
 const NormalAnex = sequelize.define(
   'normal_anex',

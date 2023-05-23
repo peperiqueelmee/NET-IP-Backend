@@ -1,4 +1,4 @@
-import TransportType from '../models/transportTypes.js';
+import TransportType from '../models/TransportType.js';
 
 const getTransportTypes = async (req, res) => {
   try {
