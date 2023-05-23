@@ -1,7 +1,9 @@
 import { Op } from 'sequelize';
 
-const validateFullFields = (array) =>
-  array.every((element) => element !== '' && element !== null && element !== undefined);
+const validateFullFields = array =>
+  array.every(
+    element => element !== '' && element !== null && element !== undefined
+  );
 
 function ValidatePasswordStrength(password) {
   // The password must be between 6 and 10 characters long
@@ -19,4 +21,8 @@ const alreadyRegistered = async (model, field, value, id = null) => {
   return Boolean(found);
 };
 
-export { validateFullFields, ValidatePasswordStrength, alreadyRegistered };
+const validateNumberAnex = (number, rangeMin, RangoMax) => {
+  return !isNaN(number) && number >= rangeMin && number <= RangoMax;
+};
+
+export { validateFullFields, ValidatePasswordStrength, alreadyRegistered, validateNumberAnex };

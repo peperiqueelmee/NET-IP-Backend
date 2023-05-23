@@ -1,8 +1,8 @@
-import { hideEmail, getFirstName, capitalizeString } from '../utils/utils.js';
-import emailRecoverEmployeePassword from '../utils/sendEmails.js';
 import Employee from '../models/Employee.js';
 import Role from '../models/Role.js';
 import Status from '../models/Status.js';
+import emailRecoverEmployeePassword from '../utils/sendEmails.js';
+import { capitalizeString, getFirstName, hideEmail } from '../utils/utils.js';
 
 const registerEmployee = async (req, res) => {
   const { rut, names, lastnames, role_id, email, username, emp_password } = req.body;
@@ -74,7 +74,6 @@ const newEmployeePassword = async (req, res) => {
 const getEmployees = async (req, res) => {
   const { rut } = req.params;
   const { page = 1, limit = 20 } = req.query;
-
   const offset = (page - 1) * limit;
 
   try {
@@ -105,7 +104,6 @@ const getEmployees = async (req, res) => {
 const getEmployeesByStatus = async (req, res) => {
   const { status } = req.params;
   const { page = 1, limit = 20 } = req.query;
-
   const offset = (page - 1) * limit;
 
   try {
@@ -165,3 +163,4 @@ export {
   sendEmailToRecoverPassword,
   updateEmployee,
 };
+

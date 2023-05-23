@@ -7,7 +7,6 @@ import { removeWhitespace } from '../utils/utils.js';
 const getPhones = async (req, res) => {
   const { phone_number } = req.params;
   const { page = 1, limit = 20 } = req.query;
-
   const offset = (page - 1) * limit;
 
   try {
@@ -38,7 +37,6 @@ const getPhones = async (req, res) => {
 const getPhonesByStatus = async (req, res) => {
   const { status } = req.params;
   const { page = 1, limit = 20 } = req.query;
-
   const offset = (page - 1) * limit;
 
   try {
@@ -68,3 +66,4 @@ const getPhonesByStatus = async (req, res) => {
 };
 
 export { getPhones, getPhonesByStatus };
+
