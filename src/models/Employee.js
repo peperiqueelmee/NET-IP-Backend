@@ -1,7 +1,7 @@
-import { sequelize } from '../config/db.js';
 import bcrypt from 'bcrypt';
-import Role from './Role.js';
 import Sequelize from 'sequelize';
+import { sequelize } from '../config/db.js';
+import Role from './Role.js';
 import Status from './Status.js';
 
 const Employee = sequelize.define(

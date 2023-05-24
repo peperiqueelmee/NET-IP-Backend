@@ -1,10 +1,11 @@
+import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
 import { sequelize } from '../config/db.js';
 import AnexType from './AnexType.js';
 import Department from './Department.js';
-import TransportType from './TransportType.js';
-import Status from './Status.js';
 import Restriction from './Restriction.js';
+import Status from './Status.js';
+import TransportType from './TransportType.js';
 
 const RegularAnex = sequelize.define(
   'regular_anex',
@@ -26,7 +27,7 @@ const RegularAnex = sequelize.define(
     anex_type_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: 1
+      defaultValue: 1,
     },
     transport_id: {
       type: Sequelize.INTEGER,
@@ -50,6 +51,14 @@ const RegularAnex = sequelize.define(
   {
     timestamps: false,
     tableName: 'regular_anexes',
+    hooks: {
+      beforeCreate: async function (regular_anex, options) {
+        if (regular_anex.changed('password')) {
+          const salt = await bcrypt.genSalt(10);
+          regular_anex.password = await bcrypt.hash(regular_anex.password, salt);
+        }
+      },
+    },
   }
 );
 
