@@ -1,17 +1,17 @@
-import NormalAnex from '../models/NormalAnex.js';
 import AnexType from '../models/AnexType.js';
 import Department from '../models/Department.js';
+import RegularAnex from '../models/RegularAnex.js';
+import Restriction from '../models/Restriction.js';
+import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
 
-const createNormalAnex = async (req, res) => {
-  const { anexNumber, password, anexType, transportType, department } =
-    req.body;
+const createRegularAnex = async (req, res) => {
+  const { anexNumber, password, transportType, department } = req.body;
 
   try {
-    const anexData = await NormalAnex.create({
+    const anexData = await RegularAnex.create({
       anex_number: anexNumber,
       password,
-      anex_type_id: anexType,
       transport_id: transportType,
       departments_id: department,
     });
@@ -28,7 +28,7 @@ const getNormalAnex = async (req, res) => {
   const offset = (page - 1) * limit;
 
   try {
-    const anexData = await NormalAnex.findAndCountAll({
+    const anexData = await RegularAnex.findAndCountAll({
       where: anexNumber ? { anex_number: anexNumber } : {},
       include: [
         {
@@ -43,6 +43,14 @@ const getNormalAnex = async (req, res) => {
           model: Department,
           attributes: ['description'],
         },
+        {
+          model: Status,
+          attributes: ['description'],
+        },
+        {
+          model: Restriction,
+          attributes: ['description'],
+        },
       ],
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
@@ -54,4 +62,4 @@ const getNormalAnex = async (req, res) => {
       .json({ code: 200, data: anexData.rows, total: anexData.count });
   } catch (error) {}
 };
-export { createNormalAnex, getNormalAnex };
+export { createRegularAnex, getNormalAnex };

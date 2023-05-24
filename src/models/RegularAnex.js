@@ -3,9 +3,11 @@ import { sequelize } from '../config/db.js';
 import AnexType from './AnexType.js';
 import Department from './Department.js';
 import TransportType from './TransportType.js';
+import Status from './Status.js';
+import Restriction from './Restriction.js';
 
-const NormalAnex = sequelize.define(
-  'normal_anex',
+const RegularAnex = sequelize.define(
+  'regular_anex',
   {
     id: {
       type: Sequelize.INTEGER,
@@ -24,6 +26,7 @@ const NormalAnex = sequelize.define(
     anex_type_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      defaultValue: 1
     },
     transport_id: {
       type: Sequelize.INTEGER,
@@ -33,15 +36,27 @@ const NormalAnex = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    restrictions_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
+    status_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
   },
   {
     timestamps: false,
-    tableName: 'normal_anex',
+    tableName: 'regular_anexes',
   }
 );
 
-NormalAnex.belongsTo(AnexType, { foreignKey: 'anex_type_id' });
-NormalAnex.belongsTo(TransportType, { foreignKey: 'transport_id' });
-NormalAnex.belongsTo(Department, { foreignKey: 'departments_id' });
+RegularAnex.belongsTo(AnexType, { foreignKey: 'anex_type_id' });
+RegularAnex.belongsTo(TransportType, { foreignKey: 'transport_id' });
+RegularAnex.belongsTo(Department, { foreignKey: 'departments_id' });
+RegularAnex.belongsTo(Restriction, { foreignKey: 'restrictions_id' });
+RegularAnex.belongsTo(Status, { foreignKey: 'status_id' });
 
-export default NormalAnex;
+export default RegularAnex;
