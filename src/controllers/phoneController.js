@@ -53,7 +53,6 @@ const getPhonesByStatus = async (req, res) => {
         },
       ],
       attributes: ['id', 'phone_number', 'status_id'],
-      attributes: ['id', 'phone_number', 'status_id'],
       offset: parseInt(offset),
       limit: parseInt(limit),
     });

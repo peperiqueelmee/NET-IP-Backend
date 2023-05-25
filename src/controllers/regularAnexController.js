@@ -55,11 +55,56 @@ const getNormalAnex = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
+      order: [['anex_number', 'ASC']],
     });
 
-    return res
-      .status(200)
-      .json({ code: 200, data: anexData.rows, total: anexData.count });
-  } catch (error) {}
+    return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error.' });
+  }
 };
-export { createRegularAnex, getNormalAnex };
+
+const getNormalByStatus = async (req, res) => {
+  const { status } = req.params;
+  const { page = 1, limit = 20 } = req.query;
+  const offset = (page - 1) * limit;
+
+  try {
+    const anexData = await RegularAnex.findAndCountAll({
+      where: { status_id: status },
+      include: [
+        {
+          model: AnexType,
+          attributes: ['description'],
+        },
+        {
+          model: TransportType,
+          attributes: ['description'],
+        },
+        {
+          model: Department,
+          attributes: ['description'],
+        },
+        {
+          model: Status,
+          attributes: ['description'],
+        },
+        {
+          model: Restriction,
+          attributes: ['description'],
+        },
+      ],
+      attributes: { exclude: ['password'] },
+      offset: parseInt(offset),
+      limit: parseInt(limit),
+      order: [['anex_number', 'ASC']],
+    });
+
+    return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+export { createRegularAnex, getNormalAnex, getNormalByStatus };

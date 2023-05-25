@@ -25,7 +25,6 @@ const validateCreateNormalAnex = async (req, res, next) => {
       return errorResponse(res, 409, 'La contraseña no cumple con los estándares de seguridad requeridos.', 'Password');
     }
     next();
-    console.log(res.headersSent);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error.' });
