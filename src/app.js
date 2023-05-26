@@ -6,8 +6,9 @@ import { connectDB } from './config/db.js';
 import {
   departmentsRoutes,
   employeeRoutes,
-  regularAnexRoutes,
+  intercomRoutes,
   phoneRoutes,
+  regularAnexRoutes,
   roleRoutes,
   statusRoutes,
   transportTypesRoutes,
@@ -47,6 +48,7 @@ app.use('/role', roleRoutes);
 app.use('/phone', phoneRoutes);
 app.use('/status', statusRoutes);
 app.use('/regular_anex', regularAnexRoutes);
+app.use('/intercom', intercomRoutes);
 app.use('/departments', departmentsRoutes);
 app.use('/transport_types', transportTypesRoutes);
 

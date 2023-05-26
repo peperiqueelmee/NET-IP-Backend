@@ -13,8 +13,8 @@ const validateCreateNormalAnex = async (req, res, next) => {
   if (!validateFullFields([anexNumber, password, transportType, department])) {
     return errorResponse(res, 400, 'Por favor completa el formulario.');
   }
-  if (!validateNumberAnex(anexNumber, 1000, 9999)) {
-    return errorResponse(res, 409, 'El Anexo debe estar en el rango de 1000-9999.', 'Anex');
+  if (!validateNumberAnex(anexNumber, 1001, 9999)) {
+    return errorResponse(res, 409, 'El Anexo debe estar en el rango de 1001-9999.', 'Anex');
   }
 
   try {
