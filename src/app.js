@@ -9,6 +9,7 @@ import {
   intercomRoutes,
   phoneRoutes,
   regularAnexRoutes,
+  restrictionsRoutes,
   roleRoutes,
   statusRoutes,
   transportTypesRoutes,
@@ -51,6 +52,7 @@ app.use('/regular_anex', regularAnexRoutes);
 app.use('/intercom', intercomRoutes);
 app.use('/departments', departmentsRoutes);
 app.use('/transport_types', transportTypesRoutes);
+app.use('/restrictions', restrictionsRoutes);
 
 // Middleware to handle routes not found
 

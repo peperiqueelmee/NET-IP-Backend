@@ -5,15 +5,15 @@ import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
 
 const createIntercom = async (req, res) => {
-  const { intercomNumber, password, intercomCaller, transportType, restriction } = req.body;
+  const { intercomNumber, password, intercomCaller, transportTypeId, restrictionId } = req.body;
 
   try {
     const intercomData = await Intercom.create({
       intercom_number: intercomNumber,
       password,
       intercom_caller: intercomCaller,
-      transport_id: transportType,
-      restrictions_id: restriction,
+      transport_id: transportTypeId,
+      restrictions_id: restrictionId,
     });
     res.status(200).json({ code: 200, data: intercomData });
   } catch (error) {
@@ -101,3 +101,4 @@ const getIntercomByStatus = async (req, res) => {
 };
 
 export { createIntercom, getIntercom, getIntercomByStatus };
+

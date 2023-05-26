@@ -1,4 +1,5 @@
 export { default as departmentsRoutes } from './departmentRoutes.js';
+export { default as restrictionsRoutes } from './restrictionRoutes.js';
 export { default as employeeRoutes } from './employeeRoutes.js';
 export { default as intercomRoutes } from './intercomRoutes.js';
 export { default as phoneRoutes } from './PhoneRoutes.js';

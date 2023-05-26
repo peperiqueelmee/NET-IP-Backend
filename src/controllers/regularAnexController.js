@@ -1,3 +1,4 @@
+import { Sequelize } from 'sequelize';
 import AnexType from '../models/AnexType.js';
 import Department from '../models/Department.js';
 import RegularAnex from '../models/RegularAnex.js';
@@ -107,4 +108,34 @@ const getNormalByStatus = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
-export { createRegularAnex, getNormalAnex, getNormalByStatus };
+const getActiveNormalAnexWithDepartmentName = async (req, res) => {
+  try {
+    const anexData = await RegularAnex.findAndCountAll({
+      where: { status_id: 1 },
+      include: [
+        {
+          model: Department,
+          attributes: [[Sequelize.literal(`CONCAT(Department.description, ' - ', anex_number)`), 'department_anex']],
+        },
+      ],
+      attributes: {
+        exclude: [
+          'id',
+          'password',
+          'anex_type_id',
+          'transport_id',
+          'departments_id',
+          'restrictions_id',
+          'status_id',
+        ],
+      },
+      order: [['anex_number', 'ASC']],
+    });
+
+    return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+export { createRegularAnex, getNormalAnex, getNormalByStatus, getActiveNormalAnexWithDepartmentName };

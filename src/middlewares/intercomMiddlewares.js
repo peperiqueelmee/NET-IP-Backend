@@ -8,12 +8,12 @@ import {
 } from '../utils/Validations.js';
 
 const validateCreateIntercom = async (req, res, next) => {
-  const { intercomNumber, password, intercomCaller, transportType, restriction } = req.body;
+  const { intercomNumber, password, intercomCaller, transportTypeId, restrictionId } = req.body;
 
-  if (!validateFullFields([intercomNumber, password, transportType, restriction])) {
+  if (!validateFullFields([intercomNumber, password, transportTypeId, restrictionId])) {
     return errorResponse(res, 400, 'Por favor completa el formulario.');
   }
-  if (restriction === 2 && !intercomCaller) {
+  if (restrictionId === 2 && !intercomCaller) {
     return errorResponse(res, 400, 'Selecciona el anexo de llamadas restringidas.');
   }
   if (!validateNumberAnex(intercomNumber, 20000, 29999)) {
