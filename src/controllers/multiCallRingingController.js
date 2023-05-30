@@ -6,12 +6,13 @@ import TransportType from '../models/TransportType.js';
 
 const createMultiCallRinging = async (req, res) => {
   const { mcrNumber, password, mcrCallAnexes, transportType, department } = req.body;
+  console.log(typeof(mcrCallAnexes))
 
   try {
     const anexData = await MultiCallRinging.create({
       mcr_number: mcrNumber,
       password,
-      mrc_call_anexes: mcrCallAnexes,
+      mcr_call_anexes: mcrCallAnexes,
       transport_id: transportType,
       departments_id: department,
     });

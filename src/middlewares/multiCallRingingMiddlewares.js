@@ -9,6 +9,7 @@ import {
 
 const validateMultiCallRinging = async (req, res, next) => {
   const { mcrNumber, password, mcrCallAnexes, transportType, department } = req.body;
+  console.log(mcrCallAnexes)
 
   if (!validateFullFields([mcrNumber, password, mcrCallAnexes, transportType, department])) {
     return errorResponse(res, 400, 'Por favor completa el formulario.');
