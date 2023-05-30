@@ -25,6 +25,7 @@ const MultiCallRinging = sequelize.define(
     },
     mcr_call_anexes: {
       type: Sequelize.STRING(100),
+      allowNull: false,
     },
     transport_id: {
       type: Sequelize.INTEGER,
