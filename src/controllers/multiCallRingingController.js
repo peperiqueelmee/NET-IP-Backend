@@ -1,17 +1,17 @@
-import { Sequelize } from 'sequelize';
 import Department from '../models/Department.js';
-import RegularAnex from '../models/RegularAnex.js';
+import MultiCallRinging from '../models/MultiCallRinging.js';
 import Restriction from '../models/Restriction.js';
 import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
 
-const createRegularAnex = async (req, res) => {
-  const { anexNumber, password, transportType, department } = req.body;
+const createMultiCallRinging = async (req, res) => {
+  const { mcrNumber, password, mcrCallAnexes, transportType, department } = req.body;
 
   try {
-    const anexData = await RegularAnex.create({
-      anex_number: anexNumber,
+    const anexData = await MultiCallRinging.create({
+      mcr_number: mcrNumber,
       password,
+      mrc_call_anexes: mcrCallAnexes,
       transport_id: transportType,
       departments_id: department,
     });
@@ -22,14 +22,14 @@ const createRegularAnex = async (req, res) => {
   }
 };
 
-const getNormalAnex = async (req, res) => {
-  const { anexNumber } = req.params;
+const getMultiCallRinging = async (req, res) => {
+  const { mcrNumber } = req.params;
   const { page = 1, limit = 20 } = req.query;
   const offset = (page - 1) * limit;
 
   try {
-    const anexData = await RegularAnex.findAndCountAll({
-      where: anexNumber ? { anex_number: anexNumber } : {},
+    const mcrData = await MultiCallRinging.findAndCountAll({
+      where: mcrNumber ? { mcr_number: mcrNumber } : {},
       include: [
         {
           model: TransportType,
@@ -51,23 +51,23 @@ const getNormalAnex = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['anex_number', 'ASC']],
+      order: [['mcr_number', 'ASC']],
     });
 
-    return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
+    return res.status(200).json({ code: 200, total: mcrData.count, data: mcrData.rows });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
 
-const getNormalByStatus = async (req, res) => {
+const getMultiCallRingingByStatus = async (req, res) => {
   const { status } = req.params;
   const { page = 1, limit = 20 } = req.query;
   const offset = (page - 1) * limit;
 
   try {
-    const anexData = await RegularAnex.findAndCountAll({
+    const mcrData = await MultiCallRinging.findAndCountAll({
       where: { status_id: status },
       include: [
         {
@@ -90,43 +90,14 @@ const getNormalByStatus = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['anex_number', 'ASC']],
+      order: [['mcr_number', 'ASC']],
     });
 
-    return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
+    return res.status(200).json({ code: 200, total: mcrData.count, data: mcrData.rows });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
 
-const getActiveNormalAnexWithDepartmentName = async (req, res) => {
-  try {
-    const anexData = await RegularAnex.findAndCountAll({
-      where: { status_id: 1 },
-      include: [
-        {
-          model: Department,
-          attributes: [[Sequelize.literal(`CONCAT(Department.description, ' - ', anex_number)`), 'department_anex']],
-        },
-      ],
-      attributes: {
-        exclude: [
-          'id',
-          'password',
-          'transport_id',
-          'departments_id',
-          'restrictions_id',
-          'status_id',
-        ],
-      },
-      order: [['anex_number', 'ASC']],
-    });
-
-    return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: 'Internal server error.' });
-  }
-};
-export { createRegularAnex, getNormalAnex, getNormalByStatus, getActiveNormalAnexWithDepartmentName };
+export { createMultiCallRinging, getMultiCallRinging, getMultiCallRingingByStatus };

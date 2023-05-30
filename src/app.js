@@ -7,6 +7,7 @@ import {
   departmentsRoutes,
   employeeRoutes,
   intercomRoutes,
+  multiCallRingingRoutes,
   phoneRoutes,
   regularAnexRoutes,
   restrictionsRoutes,
@@ -50,6 +51,7 @@ app.use('/phone', phoneRoutes);
 app.use('/status', statusRoutes);
 app.use('/regular_anex', regularAnexRoutes);
 app.use('/intercom', intercomRoutes);
+app.use('/mcr', multiCallRingingRoutes);
 app.use('/departments', departmentsRoutes);
 app.use('/transport_types', transportTypesRoutes);
 app.use('/restrictions', restrictionsRoutes);
