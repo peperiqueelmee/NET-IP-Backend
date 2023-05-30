@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
 import { sequelize } from '../config/db.js';
-import AnexType from './AnexType.js';
 import Department from './Department.js';
 import Restriction from './Restriction.js';
 import Status from './Status.js';
@@ -23,11 +22,6 @@ const RegularAnex = sequelize.define(
     password: {
       type: Sequelize.STRING(150),
       allowNull: false,
-    },
-    anex_type_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
     },
     transport_id: {
       type: Sequelize.INTEGER,
@@ -62,7 +56,6 @@ const RegularAnex = sequelize.define(
   }
 );
 
-RegularAnex.belongsTo(AnexType, { foreignKey: 'anex_type_id' });
 RegularAnex.belongsTo(TransportType, { foreignKey: 'transport_id' });
 RegularAnex.belongsTo(Department, { foreignKey: 'departments_id' });
 RegularAnex.belongsTo(Restriction, { foreignKey: 'restrictions_id' });

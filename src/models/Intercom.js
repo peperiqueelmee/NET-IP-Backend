@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
 import { sequelize } from '../config/db.js';
-import AnexType from './AnexType.js';
 import Restriction from './Restriction.js';
 import Status from './Status.js';
 import TransportType from './TransportType.js';
@@ -25,11 +24,6 @@ const Intercom = sequelize.define(
     },
     intercom_caller: {
       type: Sequelize.INTEGER,
-    },
-    anex_type_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      defaultValue: 3,
     },
     transport_id: {
       type: Sequelize.INTEGER,
@@ -59,7 +53,6 @@ const Intercom = sequelize.define(
   }
 );
 
-Intercom.belongsTo(AnexType, { foreignKey: 'anex_type_id' });
 Intercom.belongsTo(TransportType, { foreignKey: 'transport_id' });
 Intercom.belongsTo(Restriction, { foreignKey: 'restrictions_id' });
 Intercom.belongsTo(Status, { foreignKey: 'status_id' });

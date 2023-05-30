@@ -1,4 +1,3 @@
-import AnexType from '../models/AnexType.js';
 import Intercom from '../models/Intercom.js';
 import Restriction from '../models/Restriction.js';
 import Status from '../models/Status.js';
@@ -31,10 +30,6 @@ const getIntercom = async (req, res) => {
     const intercomData = await Intercom.findAndCountAll({
       where: intercomNumber ? { intercom_number: intercomNumber } : {},
       include: [
-        {
-          model: AnexType,
-          attributes: ['description'],
-        },
         {
           model: TransportType,
           attributes: ['description'],
@@ -70,10 +65,6 @@ const getIntercomByStatus = async (req, res) => {
     const intercomData = await Intercom.findAndCountAll({
       where: { status_id: status },
       include: [
-        {
-          model: AnexType,
-          attributes: ['description'],
-        },
         {
           model: TransportType,
           attributes: ['description'],

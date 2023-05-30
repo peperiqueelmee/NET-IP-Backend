@@ -1,5 +1,4 @@
 import { Sequelize } from 'sequelize';
-import AnexType from '../models/AnexType.js';
 import Department from '../models/Department.js';
 import RegularAnex from '../models/RegularAnex.js';
 import Restriction from '../models/Restriction.js';
@@ -32,10 +31,6 @@ const getNormalAnex = async (req, res) => {
     const anexData = await RegularAnex.findAndCountAll({
       where: anexNumber ? { anex_number: anexNumber } : {},
       include: [
-        {
-          model: AnexType,
-          attributes: ['description'],
-        },
         {
           model: TransportType,
           attributes: ['description'],
@@ -75,10 +70,6 @@ const getNormalByStatus = async (req, res) => {
     const anexData = await RegularAnex.findAndCountAll({
       where: { status_id: status },
       include: [
-        {
-          model: AnexType,
-          attributes: ['description'],
-        },
         {
           model: TransportType,
           attributes: ['description'],
@@ -122,7 +113,6 @@ const getActiveNormalAnexWithDepartmentName = async (req, res) => {
         exclude: [
           'id',
           'password',
-          'anex_type_id',
           'transport_id',
           'departments_id',
           'restrictions_id',
