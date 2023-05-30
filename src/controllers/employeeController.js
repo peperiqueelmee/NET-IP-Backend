@@ -92,6 +92,7 @@ const getEmployees = async (req, res) => {
       attributes: { exclude: ['emp_password', 'token'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
+      order: [['lastnames', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count });
@@ -121,6 +122,7 @@ const getEmployeesByStatus = async (req, res) => {
       ],
       offset: parseInt(offset),
       limit: parseInt(limit),
+      order: [['lastnames', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: employeeData.rows, total: employeeData.count });

@@ -111,14 +111,7 @@ const getActiveNormalAnexWithDepartmentName = async (req, res) => {
         },
       ],
       attributes: {
-        exclude: [
-          'id',
-          'password',
-          'transport_id',
-          'departments_id',
-          'restrictions_id',
-          'status_id',
-        ],
+        exclude: ['id', 'password', 'transport_id', 'departments_id', 'restrictions_id', 'status_id'],
       },
       order: [['anex_number', 'ASC']],
     });
