@@ -5,16 +5,15 @@ import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
 
 const createMultiCallRinging = async (req, res) => {
-  const { mcrNumber, password, mcrCallAnexes, transportType, department } = req.body;
-  console.log(typeof(mcrCallAnexes))
+  const { mcrNumber, password, mcrCallAnexes, transportTypeId, departmentId } = req.body;
 
   try {
     const anexData = await MultiCallRinging.create({
       mcr_number: mcrNumber,
       password,
       mcr_call_anexes: mcrCallAnexes,
-      transport_id: transportType,
-      departments_id: department,
+      transport_id: transportTypeId,
+      departments_id: departmentId,
     });
     res.status(200).json({ code: 200, data: anexData });
   } catch (error) {

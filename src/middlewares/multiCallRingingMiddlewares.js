@@ -8,10 +8,10 @@ import {
 } from '../utils/Validations.js';
 
 const validateMultiCallRinging = async (req, res, next) => {
-  const { mcrNumber, password, mcrCallAnexes, transportType, department } = req.body;
-  console.log(mcrCallAnexes)
+  const { mcrNumber, password, mcrCallAnexes, transportTypeId, departmentId } = req.body;
+  console.log(mcrCallAnexes);
 
-  if (!validateFullFields([mcrNumber, password, mcrCallAnexes, transportType, department])) {
+  if (!validateFullFields([mcrNumber, password, mcrCallAnexes, transportTypeId, departmentId])) {
     return errorResponse(res, 400, 'Por favor completa el formulario.');
   }
   if (!validateNumberAnex(mcrNumber, 30000, 39999)) {
