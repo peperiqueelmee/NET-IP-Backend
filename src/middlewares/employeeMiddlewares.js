@@ -51,12 +51,15 @@ const validateEmployeeAuthentication = async (req, res, next) => {
     if (employee.status_id === userIsInactive) {
       return errorResponse(res, 403, 'Cuenta desactivada, comunícate con soporte.');
     }
+
+    console.log(employee);
     // Attach the employee object.
     req.employee = {
       username,
       email: employee.email,
       token: generateJWT(employee.employee_id),
       rut: employee.rut,
+      role: employee.role_id,
     };
     next();
   } catch (error) {

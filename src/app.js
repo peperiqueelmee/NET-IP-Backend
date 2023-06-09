@@ -2,7 +2,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { connectDB } from './config/db.js';
 import {
   departmentsRoutes,
   employeeRoutes,
@@ -20,9 +19,6 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-
-//Connect to BD
-connectDB();
 
 // Body Parse
 app.use(bodyParser.json());
@@ -57,7 +53,11 @@ app.use('/transport_types', transportTypesRoutes);
 app.use('/restrictions', restrictionsRoutes);
 
 // Middleware to handle routes not found
-
+app.use((req, res, next) => {
+  const error = new Error('Not found');
+  error.status = 404;
+  next(error);
+});
 // Middleware to handle errors
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
