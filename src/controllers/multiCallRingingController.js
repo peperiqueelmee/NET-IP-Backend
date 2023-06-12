@@ -3,6 +3,7 @@ import MultiCallRinging from '../models/MultiCallRinging.js';
 import Restriction from '../models/Restriction.js';
 import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
+import { APPLICATION_STATES, changeAnnexStatus } from '../utils/utils.js';
 
 const createMultiCallRinging = async (req, res) => {
   const { mcrNumber, password, mcrCallAnexes, transportTypeId, departmentId } = req.body;
@@ -100,4 +101,6 @@ const getMultiCallRingingByStatus = async (req, res) => {
   }
 };
 
-export { createMultiCallRinging, getMultiCallRinging, getMultiCallRingingByStatus };
+const changeMCRStatus = changeAnnexStatus(APPLICATION_STATES);
+
+export { createMultiCallRinging, getMultiCallRinging, getMultiCallRingingByStatus, changeMCRStatus };

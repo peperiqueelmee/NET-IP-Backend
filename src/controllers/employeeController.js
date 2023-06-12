@@ -33,7 +33,7 @@ const sendEmailToRecoverPassword = async (req, res) => {
   const { name, email, token } = req.employee;
 
   //Send email with instructions.
-  emailRecoverEmployeePassword({
+  await emailRecoverEmployeePassword({
     email,
     name,
     token,
@@ -165,4 +165,3 @@ export {
   sendEmailToRecoverPassword,
   updateEmployee,
 };
-

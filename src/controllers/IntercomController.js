@@ -2,6 +2,7 @@ import Intercom from '../models/Intercom.js';
 import Restriction from '../models/Restriction.js';
 import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
+import { APPLICATION_STATES, changeAnnexStatus } from '../utils/utils.js';
 
 const createIntercom = async (req, res) => {
   const { intercomNumber, password, intercomCaller, transportTypeId, restrictionId } = req.body;
@@ -91,5 +92,6 @@ const getIntercomByStatus = async (req, res) => {
   }
 };
 
-export { createIntercom, getIntercom, getIntercomByStatus };
+const changeIntercomStatus = changeAnnexStatus(APPLICATION_STATES);
 
+export { createIntercom, getIntercom, getIntercomByStatus, changeIntercomStatus };

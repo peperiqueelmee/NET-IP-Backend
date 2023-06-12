@@ -5,6 +5,7 @@ import {
   validateFullFields,
   validateNumberAnex,
   ValidatePasswordStrength,
+  validateAnnexExistence,
 } from '../utils/Validations.js';
 
 const validateCreateNormalAnex = async (req, res, next) => {
@@ -31,4 +32,6 @@ const validateCreateNormalAnex = async (req, res, next) => {
   }
 };
 
-export { validateCreateNormalAnex };
+const validateChangeNormalAnnexStatus = validateAnnexExistence(RegularAnex, 'Anexo no registrado');
+
+export { validateCreateNormalAnex, validateChangeNormalAnnexStatus };

@@ -2,6 +2,7 @@ import MultiCallRinging from '../models/MultiCallRinging.js';
 import { errorResponse } from '../utils/utils.js';
 import {
   alreadyRegistered,
+  validateAnnexExistence,
   validateFullFields,
   validateNumberAnex,
   ValidatePasswordStrength,
@@ -31,4 +32,6 @@ const validateMultiCallRinging = async (req, res, next) => {
   }
 };
 
-export { validateMultiCallRinging };
+const validateChangeMCRStatus = validateAnnexExistence(MultiCallRinging, 'MCR no registrado');
+
+export { validateChangeMCRStatus, validateMultiCallRinging };

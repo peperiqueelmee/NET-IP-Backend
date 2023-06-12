@@ -4,6 +4,7 @@ import RegularAnex from '../models/RegularAnex.js';
 import Restriction from '../models/Restriction.js';
 import Status from '../models/Status.js';
 import TransportType from '../models/TransportType.js';
+import { APPLICATION_STATES, changeAnnexStatus } from '../utils/utils.js';
 
 const createRegularAnex = async (req, res) => {
   const { anexNumber, password, transportType, department } = req.body;
@@ -122,4 +123,13 @@ const getActiveNormalAnexWithDepartmentName = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error.' });
   }
 };
-export { createRegularAnex, getNormalAnex, getNormalByStatus, getActiveNormalAnexWithDepartmentName };
+
+const changeNormalAnnexStatus = changeAnnexStatus(APPLICATION_STATES);
+
+export {
+  changeNormalAnnexStatus, createRegularAnex,
+  getActiveNormalAnexWithDepartmentName,
+  getNormalAnex,
+  getNormalByStatus
+};
+

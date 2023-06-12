@@ -5,6 +5,7 @@ import {
   validateFullFields,
   validateNumberAnex,
   ValidatePasswordStrength,
+  validateAnnexExistence,
 } from '../utils/Validations.js';
 
 const validateCreateIntercom = async (req, res, next) => {
@@ -34,4 +35,6 @@ const validateCreateIntercom = async (req, res, next) => {
   }
 };
 
-export { validateCreateIntercom };
+const validateChangeIntercomStatus = validateAnnexExistence(Intercom, 'Intercomunicador no registrado');
+
+export { validateCreateIntercom, validateChangeIntercomStatus };
