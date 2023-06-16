@@ -11,7 +11,7 @@ const createRegularAnex = async (req, res) => {
 
   try {
     const anexData = await RegularAnex.create({
-      anex_number: anexNumber,
+      number: anexNumber,
       password,
       transport_id: transportType,
       departments_id: department,
@@ -30,7 +30,7 @@ const getNormalAnex = async (req, res) => {
 
   try {
     const anexData = await RegularAnex.findAndCountAll({
-      where: anexNumber ? { anex_number: anexNumber } : {},
+      where: anexNumber ? { number: anexNumber } : {},
       include: [
         {
           model: TransportType,
@@ -52,7 +52,7 @@ const getNormalAnex = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['anex_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
@@ -91,7 +91,7 @@ const getNormalByStatus = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['anex_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });
@@ -108,13 +108,13 @@ const getActiveNormalAnexWithDepartmentName = async (req, res) => {
       include: [
         {
           model: Department,
-          attributes: [[Sequelize.literal(`CONCAT(Department.description, ' - ', anex_number)`), 'department_anex']],
+          attributes: [[Sequelize.literal(`CONCAT(Department.description, ' - ', number)`), 'department_anex']],
         },
       ],
       attributes: {
         exclude: ['id', 'password', 'transport_id', 'departments_id', 'restrictions_id', 'status_id'],
       },
-      order: [['anex_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: anexData.rows, total: anexData.count });

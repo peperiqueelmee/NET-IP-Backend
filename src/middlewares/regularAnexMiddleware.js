@@ -19,7 +19,7 @@ const validateCreateNormalAnex = async (req, res, next) => {
   }
 
   try {
-    if (await alreadyRegistered(RegularAnex, 'anex_number', anexNumber)) {
+    if (await alreadyRegistered(RegularAnex, 'number', anexNumber)) {
       return errorResponse(res, 409, 'Anexo ya registrado.', 'Anex');
     }
     if (!ValidatePasswordStrength(password)) {
