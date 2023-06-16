@@ -22,7 +22,7 @@ const validateCreateIntercom = async (req, res, next) => {
   }
 
   try {
-    if (await alreadyRegistered(Intercom, 'intercom_number', intercomNumber)) {
+    if (await alreadyRegistered(Intercom, 'number', intercomNumber)) {
       return errorResponse(res, 409, 'Intercomunicador ya registrado.', 'Intercom');
     }
     if (!ValidatePasswordStrength(password)) {

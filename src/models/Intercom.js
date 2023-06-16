@@ -13,7 +13,7 @@ const Intercom = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    intercom_number: {
+    number: {
       type: Sequelize.INTEGER,
       allowNull: false,
       unique: true,

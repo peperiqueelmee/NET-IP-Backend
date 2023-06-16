@@ -19,7 +19,7 @@ const validateMultiCallRinging = async (req, res, next) => {
   }
 
   try {
-    if (await alreadyRegistered(MultiCallRinging, 'mcr_number', mcrNumber)) {
+    if (await alreadyRegistered(MultiCallRinging, 'number', mcrNumber)) {
       return errorResponse(res, 409, 'MCR ya registrado.', 'MCR');
     }
     if (!ValidatePasswordStrength(password)) {

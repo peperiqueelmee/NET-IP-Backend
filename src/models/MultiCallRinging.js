@@ -14,7 +14,7 @@ const MultiCallRinging = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    mcr_number: {
+    number: {
       type: Sequelize.INTEGER,
       allowNull: false,
       unique: true,

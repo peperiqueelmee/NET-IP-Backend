@@ -10,7 +10,7 @@ const createMultiCallRinging = async (req, res) => {
 
   try {
     const anexData = await MultiCallRinging.create({
-      mcr_number: mcrNumber,
+      number: mcrNumber,
       password,
       mcr_call_anexes: mcrCallAnexes,
       transport_id: transportTypeId,
@@ -30,7 +30,7 @@ const getMultiCallRinging = async (req, res) => {
 
   try {
     const mcrData = await MultiCallRinging.findAndCountAll({
-      where: mcrNumber ? { mcr_number: mcrNumber } : {},
+      where: mcrNumber ? { number: mcrNumber } : {},
       include: [
         {
           model: TransportType,
@@ -52,7 +52,7 @@ const getMultiCallRinging = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['mcr_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, total: mcrData.count, data: mcrData.rows });
@@ -91,7 +91,7 @@ const getMultiCallRingingByStatus = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['mcr_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, total: mcrData.count, data: mcrData.rows });

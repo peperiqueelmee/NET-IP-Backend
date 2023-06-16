@@ -9,7 +9,7 @@ const createIntercom = async (req, res) => {
 
   try {
     const intercomData = await Intercom.create({
-      intercom_number: intercomNumber,
+      number: intercomNumber,
       password,
       intercom_caller: intercomCaller,
       transport_id: transportTypeId,
@@ -29,7 +29,7 @@ const getIntercom = async (req, res) => {
 
   try {
     const intercomData = await Intercom.findAndCountAll({
-      where: intercomNumber ? { intercom_number: intercomNumber } : {},
+      where: intercomNumber ? { number: intercomNumber } : {},
       include: [
         {
           model: TransportType,
@@ -47,7 +47,7 @@ const getIntercom = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['intercom_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: intercomData.rows, total: intercomData.count });
@@ -82,7 +82,7 @@ const getIntercomByStatus = async (req, res) => {
       attributes: { exclude: ['password'] },
       offset: parseInt(offset),
       limit: parseInt(limit),
-      order: [['intercom_number', 'ASC']],
+      order: [['number', 'ASC']],
     });
 
     return res.status(200).json({ code: 200, data: intercomData.rows, total: intercomData.count });
