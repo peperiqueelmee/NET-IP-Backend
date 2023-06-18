@@ -6,6 +6,7 @@ import {
   departmentsRoutes,
   employeeRoutes,
   intercomRoutes,
+  logRoutes,
   multiCallRingingRoutes,
   phoneRoutes,
   regularAnexRoutes,
@@ -51,6 +52,7 @@ app.use('/mcr', multiCallRingingRoutes);
 app.use('/departments', departmentsRoutes);
 app.use('/transport_types', transportTypesRoutes);
 app.use('/restrictions', restrictionsRoutes);
+app.use('/log', logRoutes);
 
 // Middleware to handle routes not found
 app.use((req, res, next) => {

@@ -55,6 +55,7 @@ const validateEmployeeAuthentication = async (req, res, next) => {
     console.log(employee);
     // Attach the employee object.
     req.employee = {
+      id: employee.id,
       username,
       email: employee.email,
       token: generateJWT(employee.employee_id),
