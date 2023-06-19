@@ -9,3 +9,4 @@ export { default as restrictionsRoutes } from './restrictionRoutes.js';
 export { default as roleRoutes } from './roleRoutes.js';
 export { default as statusRoutes } from './statusRoutes.js';
 export { default as transportTypesRoutes } from './transportTypeRoutes.js';
+export { default as troncalRoutes } from './troncalRoutes.js'

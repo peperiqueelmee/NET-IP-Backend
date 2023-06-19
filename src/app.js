@@ -14,6 +14,7 @@ import {
   roleRoutes,
   statusRoutes,
   transportTypesRoutes,
+  troncalRoutes,
 } from './routes/index.js';
 
 dotenv.config();
@@ -47,6 +48,7 @@ app.use('/role', roleRoutes);
 app.use('/phone', phoneRoutes);
 app.use('/status', statusRoutes);
 app.use('/regular_anex', regularAnexRoutes);
+app.use('/troncal', troncalRoutes);
 app.use('/intercom', intercomRoutes);
 app.use('/mcr', multiCallRingingRoutes);
 app.use('/departments', departmentsRoutes);
