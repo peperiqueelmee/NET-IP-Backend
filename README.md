@@ -4,6 +4,16 @@
 
 Backend de aplicación web responsive que permite administrar una central telefónica de manera eficiente. Esta aplicación abarca la *gestión* de **anexos**, **troncales**, **intercomunicadores**, **multi call ringing**, así como la administración de los **usuarios** encargados de operar el sistema.
 
+## Tecnologías utilizadas
+
+- Node.js
+- Express
+- JWT (JSON Web Tokens)
+- Nodemailer
+- Bcrypt
+- Sequelize
+
+
 ## Instalación
 
 1. Clonar el repositorio: `git clone https://github.com/peperiqueelmee/--DUOC---Project_Title-BackEnd-.git`
