@@ -16,8 +16,8 @@ Backend de aplicación web responsive que permite administrar una central telef�
 
 ## Instalación
 
-1. Clonar el repositorio: `git clone https://github.com/peperiqueelmee/--DUOC---Project_Title-BackEnd-.git`
-2. Navegar hasta el directorio del proyecto: `cd --DUOC---Project_Title-BackEnd-`
+1. Clonar el repositorio: `git clone https://github.com/peperiqueelmee/NET-IP-Backend.git`
+2. Navegar hasta el directorio del proyecto: `cd NET-IP-Backend`
 3. Instalar las dependencias: `npm install`
 
 ## Configuración del entorno
