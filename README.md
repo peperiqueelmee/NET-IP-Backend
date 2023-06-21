@@ -33,7 +33,7 @@ Este proyecto utiliza una base de datos MySQL. Asegúrate de completar los sigui
 - `DB_PASS`: Contraseña del usuario de la base de datos.
 - `DB_HOST`: Dirección del servidor de la base de datos.
 
-Antes de iniciar la aplicación, también necesitarás ejecutar el script de inicialización de la base de datos. Este se encuentra en el archivo `database/init_db.sql`. Puedes ejecutarlo utilizando MySQL Workbench, o en la línea de comandos si tienes MySQL instalado en tu sistema operativo:
+Antes de iniciar la aplicación, también necesitarás ejecutar el script de inicialización de la base de datos. Este se encuentra en el archivo `src/database/init_db.sql`. Puedes ejecutarlo utilizando MySQL Workbench, o en la línea de comandos si tienes MySQL instalado en tu sistema operativo:
 
 ```bash
 mysql -u nombreUsuario -p nombreBaseDeDatos < ruta_al_archivo/database/init_db.sql
