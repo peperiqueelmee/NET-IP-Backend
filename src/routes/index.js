@@ -3,7 +3,6 @@ export { default as employeeRoutes } from './employeeRoutes.js';
 export { default as intercomRoutes } from './intercomRoutes.js';
 export { default as logRoutes } from './logRoutes.js'
 export { default as multiCallRingingRoutes } from './multiCallRingingRoutes.js';
-export { default as phoneRoutes } from './PhoneRoutes.js';
 export { default as regularAnexRoutes } from './regularAnexRoute.js';
 export { default as restrictionsRoutes } from './restrictionRoutes.js';
 export { default as roleRoutes } from './roleRoutes.js';

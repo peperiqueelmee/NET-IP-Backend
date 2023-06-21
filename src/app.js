@@ -8,7 +8,6 @@ import {
   intercomRoutes,
   logRoutes,
   multiCallRingingRoutes,
-  phoneRoutes,
   regularAnexRoutes,
   restrictionsRoutes,
   roleRoutes,
@@ -45,7 +44,6 @@ const PORT = process.env.PORT || 3000;
 //Routes
 app.use('/employee', employeeRoutes);
 app.use('/role', roleRoutes);
-app.use('/phone', phoneRoutes);
 app.use('/status', statusRoutes);
 app.use('/regular_anex', regularAnexRoutes);
 app.use('/troncal', troncalRoutes);
