@@ -18,7 +18,7 @@ const validateCreateIntercom = async (req, res, next) => {
     return errorResponse(res, 400, 'Selecciona el anexo de llamadas restringidas.');
   }
   if (!validateNumberAnex(intercomNumber, 20000, 29999)) {
-    return errorResponse(res, 409, `El Anexo debe estar en el rango de 20000-29999.`, 'Intercom');
+    return errorResponse(res, 409, `El Intercomunicador debe estar en el rango de 20000-29999.`, 'Intercom');
   }
 
   try {
